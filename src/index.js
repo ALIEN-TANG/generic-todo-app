@@ -1,18 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import LoginProvider from "context/login-provider";
 import Themer from "context/theme-provider";
 
+const queryClient = new QueryClient();
+
 ReactDOM.render(
   <React.StrictMode>
-    <LoginProvider>
-      <Themer>
-        <App />
-      </Themer>
-    </LoginProvider>
+    <QueryClientProvider client={queryClient}>
+      <LoginProvider>
+        <Themer>
+          <App />
+        </Themer>
+      </LoginProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
