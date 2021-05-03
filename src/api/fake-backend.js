@@ -46,7 +46,6 @@ const ENDPOINTS = new Map([
 // Models
 const TEMPLATE_LIST_ITEM = {
   id: "", // UUID
-  listIndex: "", // INT AUTO_INCREMENT
   title: "", // STRING
   description: "", // TEXT
   status: "PENDING", // ENUM("PENDING", "DONE")
@@ -56,7 +55,7 @@ const TEMPLATE_LIST_ITEM = {
 // const TEMPLATE_LIST = {
 //   id: "", // UUID
 //   title: "", // STRING
-//   items: [], // ARRAY[ListItem]
+//   items: [], // MAP[LIST_ITEM]
 //   createdAt: "", // DATE
 // };
 
@@ -67,6 +66,7 @@ function getLists() {
     const newListItem = {
       ...TEMPLATE_LIST_ITEM,
       id: uuidv4(),
+      title: "Untitled",
       createdAt: Date.now(),
     };
     const newList = {
@@ -83,7 +83,6 @@ function getLists() {
   window.localStorage.setItem("lists", JSON.stringify(lists));
   return lists;
 }
-
 function editList({ id, ...updates }) {
   let lists = window.localStorage.getItem("lists");
   if (lists && lists.length) {
