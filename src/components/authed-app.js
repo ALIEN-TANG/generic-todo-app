@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import Layout from "components/lib/layout";
-import { H3 } from "components/lib/typography";
+import { H1 } from "components/lib/typography";
+import TodoList from "components/todo-list";
 import { client } from "api/client";
-
-const MASTER_TOKEN = "641";
-function getMasterToken() {
-  return MASTER_TOKEN;
-}
+import { useLogin } from "context/login-provider";
 
 function AuthedApp({ username }) {
+  const { getMasterToken } = useLogin();
   const [todoLists, setTodoLists] = useState(null);
   const [editingList, selectEditingList] = useState(null);
   const { data, isLoading, isError } = useQuery("TodoLists", () => {
@@ -41,11 +39,10 @@ function AuthedApp({ username }) {
     }
   }, [todoLists]);
 
-  console.log("editingList: ", editingList);
   return (
     <Layout>
-      <H3>"Authed App"</H3>
-      {`Welcome, ${username}!`}
+      <H1>{`Welcome, ${username}!`}</H1>
+      {editingList && <TodoList list={editingList} />}
     </Layout>
   );
 }

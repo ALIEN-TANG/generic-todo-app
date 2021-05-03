@@ -4,14 +4,14 @@ export function fetchFromFakeDB(request) {
   const { url, method, data: requestData, headers } = request;
   let statusInfo = {};
   let responseData = {};
-
   if (verifyBearerAuth(headers)) {
     const endpoint = `${method}:${url}`;
     const dbReturn = ENDPOINTS.get(endpoint);
     let data = undefined;
 
     if (requestData && dbReturn) {
-      data = dbReturn(requestData);
+      let parsedData = JSON.parse(requestData);
+      data = dbReturn(parsedData);
     } else if (dbReturn) {
       data = dbReturn();
     }
@@ -38,7 +38,10 @@ export function fetchFromFakeDB(request) {
 }
 
 // Backend "routes"
-const ENDPOINTS = new Map([["GET:/lists", getLists]]);
+const ENDPOINTS = new Map([
+  ["GET:/lists", getLists],
+  ["PUT:/list", editList],
+]);
 
 // Models
 const TEMPLATE_LIST_ITEM = {
@@ -48,8 +51,14 @@ const TEMPLATE_LIST_ITEM = {
   description: "", // TEXT
   status: "PENDING", // ENUM("PENDING", "DONE")
   dueDate: "", // DATE
+  createdAt: "", // DATE
 };
-// const TEMPLATE_LIST = { id: "", name: "", items: [] };
+// const TEMPLATE_LIST = {
+//   id: "", // UUID
+//   title: "", // STRING
+//   items: [], // ARRAY[ListItem]
+//   createdAt: "", // DATE
+// };
 
 // API handlers
 function getLists() {
@@ -62,6 +71,7 @@ function getLists() {
     };
     const newList = {
       id: uuidv4(),
+      title: "Untitled",
       items: [newListItem],
       createdAt: Date.now(),
     };
@@ -72,6 +82,28 @@ function getLists() {
 
   window.localStorage.setItem("lists", JSON.stringify(lists));
   return lists;
+}
+
+function editList({ id, ...updates }) {
+  let lists = window.localStorage.getItem("lists");
+  if (lists && lists.length) {
+    lists = JSON.parse(lists);
+  }
+  let matchId = id;
+  const list = lists.find(({ id }) => id === matchId);
+  let newList;
+  if (list && updates) {
+    newList = { ...list, ...updates };
+  }
+
+  if (newList) {
+    let remainingLists = lists.filter(({ id }) => id !== matchId);
+    let newLists = [newList, ...remainingLists];
+    window.localStorage.setItem("lists", JSON.stringify(newLists));
+    return newList;
+  } else {
+    return list;
+  }
 }
 
 function verifyBearerAuth({ Authorization }) {
