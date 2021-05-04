@@ -99,7 +99,7 @@ function ListItem({ item, listId, index }) {
     </>
   );
 }
-export default React.memo(ListItem);
+export default ListItem;
 
 const DateContainer = styled.div`
   display: flex;
