@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useMemo } from "react";
+import React, { useState, useReducer, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useMutation, useQueryClient } from "react-query";
 import DatePicker from "react-datepicker";
@@ -53,13 +53,13 @@ function ListItem({ item, listId, index }) {
       },
     }
   );
-  function handleToggle(e) {
+  function handleToggle() {
     toggleStatus();
   }
   function closeModal() {
     setIsModalOpen(false);
   }
-  function openModal(e) {
+  function openModal() {
     setIsModalOpen(true);
   }
 
@@ -149,6 +149,7 @@ const types = {
   DESCRIPTION: "DESCRIPTION",
   DUEDATE: "DUEDATE",
   EDITED: "EDITED",
+  REPLACE_ITEM: "REPLACE_ITEM",
 };
 const itemReducer = (state, action) => {
   switch (action.type) {
@@ -160,6 +161,8 @@ const itemReducer = (state, action) => {
       return { ...state, dueDate: action.value, edited: true };
     case types.EDITED:
       return { ...state, edited: action.value };
+    case types.REPLACE_ITEM:
+      return { ...action.value, edited: false };
     default:
       return state;
   }
@@ -174,6 +177,9 @@ function EditModal({ item, listId, ...props }) {
     description,
     dueDate,
   });
+  useEffect(() => {
+    dispatch({ type: types.REPLACE_ITEM, value: { ...item } });
+  }, [item]);
   const { mutate } = useMutation(
     () => {
       const token = getMasterToken();

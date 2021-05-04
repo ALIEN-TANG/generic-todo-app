@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useMutation, useQueryClient } from "react-query";
 import TextInput from "components/lib/text-input";
@@ -14,14 +14,18 @@ function TodoList({ list }) {
   const queryClient = useQueryClient();
   const [hasTitle, setHasTitle] = useState(false);
   const [listName, setListName] = useState(title);
-  const pendingItems = useMemo(
-    () => items.filter(({ status }) => status === "PENDING"),
-    [items]
-  );
-  const doneItems = useMemo(
-    () => items.filter(({ status }) => status === "DONE"),
-    [items]
-  );
+  const [pendingItems, setPendingItems] = useState(undefined);
+  const [doneItems, setDoneItems] = useState(undefined);
+
+  useEffect(() => {
+    if (items && items.length) {
+      const pendingItems = items.filter(({ status }) => status === "PENDING");
+      const doneItems = items.filter(({ status }) => status === "DONE");
+      setPendingItems(pendingItems);
+      setDoneItems(doneItems);
+    }
+  }, [items]);
+
   function handleTextInput(input) {
     setListName(input);
   }
