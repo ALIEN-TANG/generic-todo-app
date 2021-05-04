@@ -48,23 +48,42 @@ function TodoList({ list }) {
       },
     }
   );
+  const { mutate: createItem } = useMutation(
+    () => {
+      const token = getMasterToken();
+      return client("/item", {
+        method: "POST",
+        token,
+        data: { listId: id },
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("TodoLists");
+      },
+    }
+  );
+
   function handleSave() {
     mutate();
   }
   return (
     <Grid>
-      <FlexContainer>
-        <TextInput
-          label="List Name"
-          value={listName}
-          onChange={handleTextInput}
-          style={{ width: "200px" }}
-          inputFontSize="24px"
-        />
-        <SaveButton onClick={handleSave} disabled={!hasTitle}>
-          Save
-        </SaveButton>
-      </FlexContainer>
+      <FlexColumn>
+        <NameContainer>
+          <TextInput
+            label="List Name"
+            value={listName}
+            onChange={handleTextInput}
+            style={{ width: "200px" }}
+            inputFontSize="24px"
+          />
+          <SaveButton onClick={handleSave} disabled={!hasTitle}>
+            Save
+          </SaveButton>
+        </NameContainer>
+        <AddButton onClick={createItem}>Add Item</AddButton>
+      </FlexColumn>
       <ListContent>
         <ItemColumn>
           <H2>Pending</H2>
@@ -101,16 +120,26 @@ const SaveButton = styled(Button)`
   align-self: flex-end;
   margin-left: 24px;
 `;
-const FlexContainer = styled.div`
+const AddButton = styled(Button)`
+  display: block;
+`;
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  grid-row: 1;
+`;
+const NameContainer = styled.div`
   display: flex;
   align-items: center;
   height: fit-content;
   width: 100%;
+  margin-bottom: 24px;
 `;
 const ListContent = styled.div`
   display: grid;
-  grid-template-columns: 240px 240px;
-  grid-column-gap: 2rem;
+  grid-row: 2;
+  grid-template-columns: 360px 360px;
+  grid-column-gap: 48px;
   width: 100%;
   height: 100%;
   overflow: scroll;

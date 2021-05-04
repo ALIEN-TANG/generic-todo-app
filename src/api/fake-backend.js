@@ -42,6 +42,7 @@ const ENDPOINTS = new Map([
   ["GET:/lists", getLists],
   ["PUT:/list", editList],
   ["PUT:/item", editItem],
+  ["POST:/item", createItem],
 ]);
 
 // Models
@@ -120,7 +121,22 @@ function editItem({ id: itemId, listId, ...updates }) {
   }
   return newList || list;
 }
-
+function createItem({ listId }) {
+  const list = editList({ id: listId });
+  let newList;
+  let newListItems;
+  const newItem = {
+    ...TEMPLATE_LIST_ITEM,
+    id: uuidv4(),
+    title: "Untitled",
+    createdAt: Date.now(),
+  };
+  if (list && list.items) {
+    newListItems = [...list.items, newItem];
+    newList = editList({ id: listId, items: newListItems });
+  }
+  return newList || list;
+}
 function verifyBearerAuth({ Authorization }) {
   return Authorization === "Bearer 641";
 }

@@ -114,6 +114,8 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: ${(props) => props.theme.boxShadow};
+  margin-bottom: 16px;
+  background: ${(props) => props.theme.colors.paleGreen};
 `;
 
 const types = {
@@ -132,6 +134,8 @@ const itemReducer = (state, action) => {
       return { ...state, dueDate: action.value, edited: true };
     case types.EDITED:
       return { ...state, edited: action.value };
+    default:
+      return state;
   }
 };
 
@@ -169,7 +173,6 @@ function EditModal({ item, listId, ...props }) {
     props.onRequestClose();
   }
   function handleSelectDate(date) {
-    console.log("date: ", date, "typeof: ", typeof date);
     dispatch({
       type: types.DUEDATE,
       value: new Date(date),
@@ -192,16 +195,22 @@ function EditModal({ item, listId, ...props }) {
         label="title"
         value={state.title}
         onChange={(value) => dispatch({ type: types.TITLE, value })}
-        style={{ width: "200px", marginBottom: "24px" }}
-        inputFontSize="24px"
-      />
-      <TextInput
-        label="description"
-        value={state.description}
         style={{ marginBottom: "24px" }}
-        onChange={(value) => dispatch({ type: types.DESCRIPTION, value })}
         inputFontSize="24px"
       />
+      <textarea
+        label="description"
+        style={{ marginBottom: "24px", height: "250px", width: "100%" }}
+        onChange={(e) =>
+          dispatch({
+            type: types.DESCRIPTION,
+            value: e.target.value,
+          })
+        }
+        inputFontSize="24px"
+      >
+        {state.description}
+      </textarea>
       <DatePicker
         selected={state.dueDate ? new Date(state.dueDate) : new Date()}
         style={{ fontSize: "24px" }}
