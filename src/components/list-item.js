@@ -133,8 +133,7 @@ const CheckboxContainer = styled.div`
   justify-content: flex-end;
 `;
 const Card = styled.div`
-  border: 1px solid black;
-  width: 100%;
+  width: 95%;
   height: ${(props) => props.height || "100%"};
   padding: 8px;
   display: flex;

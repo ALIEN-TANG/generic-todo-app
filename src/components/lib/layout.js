@@ -39,6 +39,7 @@ const Logo = styled.div`
   grid-row: 1;
   box-shadow: ${(props) => props.theme.boxShadow};
   margin: 16px;
+  background: ${(props) => props.theme.colors.brightGreen};
 `;
 const Nav = styled.nav`
   display: flex;

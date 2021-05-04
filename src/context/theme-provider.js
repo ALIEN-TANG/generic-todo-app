@@ -2,8 +2,11 @@ import { ThemeProvider } from "@emotion/react";
 
 export const theme = {
   colors: {
+    brightGreen: "#06FF00",
     paleGreen: "#EAF4EC",
+    rust: "#BE561C",
     sand: "#D9D1C1",
+    white: "#FFFFFF",
   },
   fontSizes: {
     small: "12px",
