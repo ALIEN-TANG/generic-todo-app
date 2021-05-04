@@ -9,6 +9,7 @@ export const theme = {
     body: "16px",
     large: "24px",
   },
+  boxShadow: "0 4px 8px black",
 };
 
 function Themer({ children }) {

@@ -48,7 +48,7 @@ function TodoList({ list }) {
       },
     }
   );
-  function handleClickSave() {
+  function handleSave() {
     mutate();
   }
   return (
@@ -61,7 +61,7 @@ function TodoList({ list }) {
           style={{ width: "200px" }}
           inputFontSize="24px"
         />
-        <SaveButton onClick={handleClickSave} disabled={!hasTitle}>
+        <SaveButton onClick={handleSave} disabled={!hasTitle}>
           Save
         </SaveButton>
       </FlexContainer>

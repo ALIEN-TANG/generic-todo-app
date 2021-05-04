@@ -19,4 +19,6 @@ const Btn = styled.button`
   width: fit-content;
   height: fit-content;
   padding: 8px 16px;
+  cursor: pointer;
+  outline: none;
 `;

@@ -50,7 +50,7 @@ const TEMPLATE_LIST_ITEM = {
   title: "", // STRING
   description: "", // TEXT
   status: "PENDING", // ENUM("PENDING", "DONE")
-  dueDate: "", // DATE
+  dueDate: null, // DATE
   createdAt: "", // DATE
 };
 // const TEMPLATE_LIST = {

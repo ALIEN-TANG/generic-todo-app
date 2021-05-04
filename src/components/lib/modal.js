@@ -8,6 +8,7 @@ ReactModal.defaultStyles.content.borderRadius = `20px`;
 ReactModal.defaultStyles.content.padding = "3rem";
 ReactModal.defaultStyles.content.width = "720px";
 ReactModal.defaultStyles.content.margin = "0 auto";
+ReactModal.defaultStyles.content.boxShadow = `${theme.boxShadow}`;
 
 function Modal({ children, ...props }) {
   const modalStyle = props.small
