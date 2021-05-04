@@ -147,7 +147,7 @@ const FlexColumn = styled.div`
   grid-row: 1;
   box-shadow: ${(props) => props.theme.boxShadow};
   padding: 16px;
-  margin-bottom: 24px;
+  margin: 0 16px 24px 1px;
 `;
 const NameContainer = styled.div`
   display: flex;
