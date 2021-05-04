@@ -43,6 +43,7 @@ const ENDPOINTS = new Map([
   ["PUT:/list", editList],
   ["PUT:/item", editItem],
   ["POST:/item", createItem],
+  ["DELETE:/item", deleteItem],
 ]);
 
 // Models
@@ -133,6 +134,17 @@ function createItem({ listId }) {
   };
   if (list && list.items) {
     newListItems = [...list.items, newItem];
+    newList = editList({ id: listId, items: newListItems });
+  }
+  return newList || list;
+}
+function deleteItem({ id, listId }) {
+  let itemId = id;
+  const list = editList({ id: listId });
+  let newList;
+  let newListItems;
+  if (list && !!list.items.length) {
+    newListItems = list.items.filter(({ id }) => id !== itemId);
     newList = editList({ id: listId, items: newListItems });
   }
   return newList || list;

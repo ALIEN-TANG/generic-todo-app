@@ -67,6 +67,7 @@ function TodoList({ list }) {
   function handleSave() {
     mutate();
   }
+
   return (
     <Grid>
       <FlexColumn>
@@ -89,18 +90,26 @@ function TodoList({ list }) {
           <H2>Pending</H2>
           {pendingItems &&
             !!pendingItems.length &&
-            pendingItems.map((item) => (
-              <ListItem key={item.id} item={item} listId={id} />
-            ))}
+            pendingItems
+              .sort((a, b) => {
+                return new Date(a.dueDate) - new Date(b.dueDate);
+              })
+              .map((item) => (
+                <ListItem key={item.id} item={item} listId={id} />
+              ))}
           {pendingItems && !pendingItems.length && "Nothing yet!"}
         </ItemColumn>
         <ItemColumn>
           <H2>Done</H2>
           {doneItems &&
             !!doneItems.length &&
-            doneItems.map((item) => (
-              <ListItem key={item.id} item={item} listId={id} />
-            ))}
+            doneItems
+              .sort((a, b) => {
+                return new Date(b.dueDate) - new Date(a.dueDate);
+              })
+              .map((item) => (
+                <ListItem key={item.id} item={item} listId={id} />
+              ))}
           {doneItems && !doneItems.length && "Nothing yet!"}
         </ItemColumn>
       </ListContent>

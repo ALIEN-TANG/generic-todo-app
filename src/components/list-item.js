@@ -35,19 +35,34 @@ function ListItem({ item, listId }) {
       },
     }
   );
+  const { mutate: deleteItem } = useMutation(
+    () => {
+      const token = getMasterToken();
+      return client("/item", {
+        method: "DELETE",
+        token,
+        data: {
+          id: item.id,
+          listId,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("TodoLists");
+      },
+    }
+  );
   function handleToggle(e) {
-    e.stopPropagation();
-    e.preventDefault();
     toggleStatus();
   }
   function closeModal() {
     setIsModalOpen(false);
   }
   function openModal(e) {
-    e.stopPropagation();
-    e.preventDefault();
     setIsModalOpen(true);
   }
+
   const formattedDate = item.dueDate
     ? moment(item.dueDate).format("MM-DD-YY")
     : "unspecified";
@@ -56,7 +71,10 @@ function ListItem({ item, listId }) {
       <Card height="80px">
         <Header>
           <H3>{item.title}</H3>
-          <EditButton onClick={openModal}>Edit</EditButton>
+          <ButtonGroup>
+            <EditButton onClick={openModal}>Edit</EditButton>
+            <DeleteButton onClick={deleteItem}>Delete</DeleteButton>
+          </ButtonGroup>
         </Header>
         <ItemBody>
           <DateContainer>due: {formattedDate}</DateContainer>
@@ -90,10 +108,18 @@ const DateContainer = styled.div`
 `;
 const Header = styled.div`
   display: grid;
-  grid-template-columns: 1fr 60px;
+  grid-template-columns: 1fr 140px;
   width: 100%;
 `;
+const ButtonGroup = styled.div`
+  display: flex;
+  grid-row: 1;
+  grid-column: 2;
+`;
 const EditButton = styled(Button)``;
+const DeleteButton = styled(Button)`
+  margin-left: 8px;
+`;
 
 const ItemBody = styled.div`
   display: grid;
