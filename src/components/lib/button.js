@@ -14,5 +14,11 @@ function Button(props) {
   );
 }
 
-const Btn = styled.button``;
 export default Button;
+const Btn = styled.button`
+  width: fit-content;
+  height: fit-content;
+  padding: 8px 16px;
+  cursor: pointer;
+  outline: none;
+`;

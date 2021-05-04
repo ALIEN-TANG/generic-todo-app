@@ -4,6 +4,12 @@ export const theme = {
   colors: {
     paleGreen: "#EAF4EC",
   },
+  fontSizes: {
+    small: "12px",
+    body: "16px",
+    large: "24px",
+  },
+  boxShadow: "0 4px 8px black",
 };
 
 function Themer({ children }) {
