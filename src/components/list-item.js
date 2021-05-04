@@ -1,6 +1,9 @@
 import React, { useState, useReducer, useMemo } from "react";
 import styled from "@emotion/styled";
 import { useMutation, useQueryClient } from "react-query";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 import { H3 } from "components/lib/typography";
 import Modal from "components/lib/modal";
 import TextInput from "components/lib/text-input";
@@ -45,6 +48,9 @@ function ListItem({ item, listId }) {
     e.preventDefault();
     setIsModalOpen(true);
   }
+  const formattedDate = item.dueDate
+    ? moment(item.dueDate).format("MM-DD-YY")
+    : "unspecified";
   return (
     <>
       <Card height="80px">
@@ -53,7 +59,7 @@ function ListItem({ item, listId }) {
           <EditButton onClick={openModal}>Edit</EditButton>
         </Header>
         <ItemBody>
-          <div>due: {item.dueDate || "unspecified"}</div>
+          <DateContainer>due: {formattedDate}</DateContainer>
           <CheckboxContainer>
             <label htmlFor="done">done:</label>
             <input
@@ -77,6 +83,11 @@ function ListItem({ item, listId }) {
 }
 export default React.memo(ListItem);
 
+const DateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
 const Header = styled.div`
   display: grid;
   grid-template-columns: 1fr 60px;
@@ -87,6 +98,7 @@ const EditButton = styled(Button)``;
 const ItemBody = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  height: 100%;
 `;
 const CheckboxContainer = styled.div`
   display: flex;
@@ -156,7 +168,23 @@ function EditModal({ item, listId, ...props }) {
     dispatch({ type: types.EDITED, value: false });
     props.onRequestClose();
   }
+  function handleSelectDate(date) {
+    console.log("date: ", date, "typeof: ", typeof date);
+    dispatch({
+      type: types.DUEDATE,
+      value: new Date(date),
+    });
+  }
 
+  const CustomDateInput = React.forwardRef(({ value, onClick }, ref) => (
+    <input
+      type="text"
+      onChange={onClick}
+      ref={ref}
+      style={{ fontSize: "24px", marginBottom: "24px" }}
+      value={value}
+    />
+  ));
   return (
     <Modal {...props}>
       <H3>Item Edit</H3>
@@ -173,6 +201,12 @@ function EditModal({ item, listId, ...props }) {
         style={{ marginBottom: "24px" }}
         onChange={(value) => dispatch({ type: types.DESCRIPTION, value })}
         inputFontSize="24px"
+      />
+      <DatePicker
+        selected={state.dueDate ? new Date(state.dueDate) : new Date()}
+        style={{ fontSize: "24px" }}
+        onChange={handleSelectDate}
+        customInput={<CustomDateInput />}
       />
       <Actions>
         <SaveButton onClick={handleSave} disabled={!state.edited}>
