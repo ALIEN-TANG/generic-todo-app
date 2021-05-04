@@ -29,6 +29,7 @@ const Grid = styled.div`
   height: 100vh;
   width: 100vw;
   grid-gap: 2rem;
+  overflow: hidden;
 `;
 const Logo = styled.div`
   display: flex;
@@ -36,6 +37,8 @@ const Logo = styled.div`
   justify-content: center;
   grid-column: 1;
   grid-row: 1;
+  box-shadow: ${(props) => props.theme.boxShadow};
+  margin: 16px;
 `;
 const Nav = styled.nav`
   display: flex;
@@ -43,10 +46,15 @@ const Nav = styled.nav`
   justify-content: center;
   grid-column: 2/3;
   grid-row: 1/2;
+  background: ${(props) => props.theme.colors.paleGreen};
+  box-shadow: ${(props) => props.theme.boxShadow};
+  margin: 16px;
 `;
 const Main = styled.main`
   grid-row: 2/3;
   grid-column: 2/3;
+  margin: 16px;
+  overflow-y: scroll;
 `;
 const Aside = styled.aside`
   display: flex;
@@ -54,6 +62,9 @@ const Aside = styled.aside`
   justify-content: center;
   grid-column: 1/2;
   grid-row: 2/3;
+  background: ${(props) => props.theme.colors.paleGreen};
+  box-shadow: ${(props) => props.theme.boxShadow};
+  margin: 16px;
 `;
 
 export default Layout;

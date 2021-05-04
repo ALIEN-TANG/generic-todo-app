@@ -131,7 +131,7 @@ const Grid = styled.div`
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-rows: 160px 1fr;
+  grid-template-rows: 180px 1fr;
 `;
 const SaveButton = styled(Button)`
   display: flex;
@@ -145,6 +145,9 @@ const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
   grid-row: 1;
+  box-shadow: ${(props) => props.theme.boxShadow};
+  padding: 16px;
+  margin-bottom: 24px;
 `;
 const NameContainer = styled.div`
   display: flex;
