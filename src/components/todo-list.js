@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 import { useMutation, useQueryClient } from "react-query";
 import TextInput from "components/lib/text-input";
@@ -14,7 +14,14 @@ function TodoList({ list }) {
   const queryClient = useQueryClient();
   const [hasTitle, setHasTitle] = useState(false);
   const [listName, setListName] = useState(title);
-
+  const pendingItems = useMemo(
+    () => items.filter(({ status }) => status === "PENDING"),
+    [items]
+  );
+  const doneItems = useMemo(
+    () => items.filter(({ status }) => status === "DONE"),
+    [items]
+  );
   function handleTextInput(input) {
     setListName(input);
   }
@@ -44,8 +51,6 @@ function TodoList({ list }) {
   function handleClickSave() {
     mutate();
   }
-  const pendingItems = items.filter(({ status }) => status === "PENDING");
-  const doneItems = items.filter(({ status }) => status === "DONE");
   return (
     <Grid>
       <FlexContainer>
@@ -65,13 +70,18 @@ function TodoList({ list }) {
           <H2>Pending</H2>
           {pendingItems &&
             !!pendingItems.length &&
-            pendingItems.map((item) => <ListItem key={item.id} item={item} />)}
+            pendingItems.map((item) => (
+              <ListItem key={item.id} item={item} listId={id} />
+            ))}
+          {pendingItems && !pendingItems.length && "Nothing yet!"}
         </ItemColumn>
         <ItemColumn>
           <H2>Done</H2>
           {doneItems &&
             !!doneItems.length &&
-            doneItems.map((item) => <ListItem key={item.id} item={item} />)}
+            doneItems.map((item) => (
+              <ListItem key={item.id} item={item} listId={id} />
+            ))}
           {doneItems && !doneItems.length && "Nothing yet!"}
         </ItemColumn>
       </ListContent>

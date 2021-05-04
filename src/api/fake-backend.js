@@ -41,6 +41,7 @@ export function fetchFromFakeDB(request) {
 const ENDPOINTS = new Map([
   ["GET:/lists", getLists],
   ["PUT:/list", editList],
+  ["PUT:/item", editItem],
 ]);
 
 // Models
@@ -91,10 +92,9 @@ function editList({ id, ...updates }) {
   let matchId = id;
   const list = lists.find(({ id }) => id === matchId);
   let newList;
-  if (list && updates) {
+  if (list && !!Object.keys(updates).length) {
     newList = { ...list, ...updates };
   }
-
   if (newList) {
     let remainingLists = lists.filter(({ id }) => id !== matchId);
     let newLists = [newList, ...remainingLists];
@@ -103,6 +103,22 @@ function editList({ id, ...updates }) {
   } else {
     return list;
   }
+}
+function editItem({ id: itemId, listId, ...updates }) {
+  const list = editList({ id: listId });
+  let newItem;
+  let newListItems;
+  let newList;
+  if (list && list.items.length && itemId && !!Object.keys(updates).length) {
+    let item = list.items.find(({ id }) => id === itemId);
+    newItem = { ...item, ...updates };
+  }
+  if (newItem) {
+    let remainingItems = list.items.filter(({ id }) => id !== itemId);
+    newListItems = [newItem, ...remainingItems];
+    newList = editList({ id: listId, items: newListItems });
+  }
+  return newList || list;
 }
 
 function verifyBearerAuth({ Authorization }) {
