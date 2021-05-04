@@ -1,4 +1,5 @@
-import { screen, fireEvent } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import ReactModal from "react-modal";
 
 import App from "./App";
@@ -25,8 +26,8 @@ test(`welcomes user if logged in`, async () => {
   const loginButton = screen.getByRole("button", {
     name: /login/i,
   });
-  fireEvent.change(loginTextBox, { target: { value: "Alien" } });
-  fireEvent.click(loginButton);
+  userEvent.type(loginTextBox, "Alien");
+  userEvent.click(loginButton);
 
   const welcome = await screen.findByRole("heading", {
     name: /welcome, alien!/i,

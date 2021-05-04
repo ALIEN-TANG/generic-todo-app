@@ -11,7 +11,7 @@ import Button from "components/lib/button";
 import { client } from "api/client";
 import { useLogin } from "context/login-provider";
 
-function ListItem({ item, listId }) {
+function ListItem({ item, listId, index }) {
   const queryClient = useQueryClient();
   const { getMasterToken } = useLogin();
   const isDone = useMemo(() => item.status === "DONE", [item]);
@@ -68,7 +68,7 @@ function ListItem({ item, listId }) {
     : "unspecified";
   return (
     <>
-      <Card height="80px">
+      <Card height="80px" data-testid={`list-item-${index}`}>
         <Header>
           <H3>{item.title}</H3>
           <ButtonGroup>
@@ -226,6 +226,7 @@ function EditModal({ item, listId, ...props }) {
       />
       <textarea
         label="description"
+        defaultValue={state.description}
         style={{ marginBottom: "24px", height: "250px", width: "100%" }}
         onChange={(e) =>
           dispatch({
@@ -233,10 +234,7 @@ function EditModal({ item, listId, ...props }) {
             value: e.target.value,
           })
         }
-        inputFontSize="24px"
-      >
-        {state.description}
-      </textarea>
+      />
       <DatePicker
         selected={state.dueDate ? new Date(state.dueDate) : new Date()}
         style={{ fontSize: "24px" }}

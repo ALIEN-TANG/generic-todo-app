@@ -94,10 +94,17 @@ function TodoList({ list }) {
               .sort((a, b) => {
                 return new Date(a.dueDate) - new Date(b.dueDate);
               })
-              .map((item) => (
-                <ListItem key={item.id} item={item} listId={id} />
+              .map((item, index) => (
+                <ListItem
+                  key={`list-item-${index}`}
+                  item={item}
+                  listId={id}
+                  index={index}
+                />
               ))}
-          {pendingItems && !pendingItems.length && "Nothing yet!"}
+          {pendingItems && !pendingItems.length && (
+            <span data-testid="no-pending-items">Nothing yet!</span>
+          )}
         </ItemColumn>
         <ItemColumn>
           <H2>Done</H2>
@@ -110,7 +117,9 @@ function TodoList({ list }) {
               .map((item) => (
                 <ListItem key={item.id} item={item} listId={id} />
               ))}
-          {doneItems && !doneItems.length && "Nothing yet!"}
+          {doneItems && !doneItems.length && (
+            <span data-testid="no-done-items">Nothing yet!</span>
+          )}
         </ItemColumn>
       </ListContent>
     </Grid>
@@ -151,7 +160,6 @@ const ListContent = styled.div`
   grid-column-gap: 48px;
   width: 100%;
   height: 100%;
-  overflow: scroll;
 `;
 const ItemColumn = styled.div`
   width: 100%;
